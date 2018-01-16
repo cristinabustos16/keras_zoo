@@ -74,7 +74,7 @@ def IoU(n_classes, void_labels):
             if i == 0:
                 not_void = K.not_equal(y_true, void_labels[i])
             else:
-                not_void = not_void * K.not_equal(y_true, void_labels[i])
+                not_void = tf.logical_and( not_void, K.not_equal(y_true, void_labels[i]))
 
         sum_I = K.zeros((1,), dtype='float32')
 
