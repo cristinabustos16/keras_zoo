@@ -3,7 +3,7 @@ import os
 # Keras imports
 from metrics.metrics import cce_flatt, IoU, YOLOLoss, YOLOMetrics
 from keras import backend as K
-from keras.utils.visualize_util import plot
+from keras.utils.vis_utils import plot_model
 
 # Classification models
 from models.lenet import build_lenet
@@ -13,7 +13,7 @@ from models.resnet import build_resnet50
 from models.inceptionV3 import build_inceptionV3
 
 # Detection models
-from models.yolo import build_yolo
+#from models.yolo import build_yolo
 
 # Segmentation models
 from models.fcn8 import build_fcn8
@@ -23,8 +23,8 @@ from models.resnetFCN import build_resnetFCN
 from models.densenetFCN import build_densenetFCN
 
 # Adversarial models
-from models.adversarial_semseg import Adversarial_Semseg
-from models.gan import GAN
+#from models.adversarial_semseg import Adversarial_Semseg
+#from models.gan import GAN
 
 from models.model import One_Net_Model
 
@@ -181,7 +181,7 @@ class Model_Factory():
         # Show model structure
         if cf.show_model:
             model.summary()
-            plot(model, to_file=os.path.join(cf.savepath, 'model.png'))
+            plot_model(model, to_file=os.path.join(cf.savepath, 'model.png'))
 
         # Output the model
         print ('   Model: ' + cf.model_name)

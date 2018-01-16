@@ -7,8 +7,8 @@ perc_mb2                     = None            # Percentage of data from the sec
 # Model
 model_name                   = 'resnetFCN'     # Model to use ['fcn8' | 'segnet_basic' | 'segnet_vgg' | 'resnetFCN' | 'lenet' | 'alexNet' | 'vgg16' |  'vgg19' | 'resnet50' | 'InceptionV3']
 freeze_layers_from           = None            # Freeze layers from 0 to this layer during training (Useful for finetunning) [None | 'base_model' | Layer_id]
-show_model                   = True            # Show the architecture layers
-load_imageNet                = True            # Load Imagenet weights and normalize following imagenet procedure
+show_model                   = False            # Show the architecture layers
+load_imageNet                = False            # Load Imagenet weights and normalize following imagenet procedure
 load_pretrained              = False           # Load a pretrained model for doing finetuning
 weights_file                 = 'weights.hdf5'  # Training weight file name
 # weights_file                 = '/datatmp/dvazquez/Experiments/cityscapes/resnetFCNfrozen/weights.hdf5'  # Training weight file name
@@ -28,15 +28,15 @@ max_q_size                   = 10              # Maximum size for the data gener
 workers                      = 5               # Maximum number of processes to spin up when using process based threading
 
 # Batch sizes
-batch_size_train             = 2               # Batch size during training
-batch_size_valid             = 1               # Batch size during validation
-batch_size_test              = 1               # Batch size during testing
-crop_size_train              = (512, 512)      # Crop size during training (Height, Width) or None
+batch_size_train             = 5               # Batch size during training
+batch_size_valid             = 10              # Batch size during validation
+batch_size_test              = 10              # Batch size during testing
+crop_size_train              = (640, 640)      # Crop size during training (Height, Width) or None
 crop_size_valid              = None            # Crop size during validation
 crop_size_test               = None            # Crop size during testing
-resize_train                 = None  #(512, 1024)      # Resize the image during training (Height, Width) or None
-resize_valid                 = None  #(512, 1024)      # Resize the image during validation
-resize_test                  = None  #(512, 1024)      # Resize the image during testing
+resize_train                 = (640, 640)      # Resize the image during training (Height, Width) or None
+resize_valid                 = (640, 640)      # Resize the image during validation
+resize_test                  = (640, 640)      # Resize the image during testing
 
 # Data shuffle
 shuffle_train                = True            # Whether to shuffle the training data
@@ -50,7 +50,7 @@ seed_test                    = 1924            # Random seed for the testing shu
 optimizer                    = 'adam'          # Optimizer
 learning_rate                = 0.0001          # Training learning rate
 weight_decay                 = 0.0005          # Weight decay or L2 parameter norm penalty
-n_epochs                     = 100             # Number of epochs during training
+n_epochs                     = 500             # Number of epochs during training
 
 # Callback save results
 save_results_enabled         = True            # Enable the Callback

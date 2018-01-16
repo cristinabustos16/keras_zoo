@@ -28,7 +28,7 @@ class Configuration():
         shared_experiments_path = self.shared_experiments_path
 
         # Load configuration file
-        print config_path
+        print "config_path ",config_path
         cf = imp.load_source('config', config_path)
 
         # Save extra parameter

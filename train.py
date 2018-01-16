@@ -11,7 +11,7 @@ from config.configuration import Configuration
 from tools.logger import Logger
 from tools.dataset_generators import Dataset_Generators
 from tools.optimizer_factory import Optimizer_Factory
-from callbacks.callbacks_factory import Callbacks_Factory
+#from callbacks.callbacks_factory import Callbacks_Factory
 from models.model_factory import Model_Factory
 
 
@@ -104,9 +104,9 @@ def main():
     parser.add_argument('-e', '--exp_name', type=str,
                         default=None, help='Name of the experiment')
     parser.add_argument('-s', '--shared_path', type=str,
-                        default='/data', help='Shared path')
+                        default='/home/cbustos/', help='Shared path')
     parser.add_argument('-l', '--local_path', type=str,
-                        default='/datatmp', help='Local path')
+                        default='/home/cbustos/', help='Local path')
 
     arguments = parser.parse_args()
 
