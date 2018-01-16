@@ -72,8 +72,12 @@ class Model_Factory():
                     in_shape = (cf.target_size_train[0],
                                 cf.target_size_train[1],
                                 cf.dataset.n_channels)
-            loss = cce_flatt(cf.dataset.void_class, cf.dataset.cb_weights)
-            metrics = [IoU(cf.dataset.n_classes, cf.dataset.void_class)]
+            #loss = cce_flatt(cf.dataset.void_class, cf.dataset.cb_weights)
+            # metrics = [IoU(cf.dataset.n_classes, cf.dataset.void_class)]
+            loss = 'binary_crossentropy' 
+            metrics = ['accuracy']
+            print '-----loss ----- ', loss
+            print '-----metrics****++++ ', metrics
         else:
             raise ValueError('Unknown problem type')
         return in_shape, loss, metrics

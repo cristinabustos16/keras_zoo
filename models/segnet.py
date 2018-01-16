@@ -2,7 +2,7 @@
 from keras import backend as K
 from keras.models import Model
 from keras.layers import Input
-from keras.layers.convolutional import (Convolution2D, MaxPooling2D,
+from keras.layers.convolutional import (Conv2D, MaxPooling2D,
                                         ZeroPadding2D, UpSampling2D)
 from keras.layers.normalization import BatchNormalization
 from keras.layers.core import Activation
@@ -31,9 +31,9 @@ def downsampling_block_basic(inputs, n_filters, filter_size,
     # This extra padding is used to prevent problems with different input
     # sizes. At the end the crop layer remove extra paddings
     pad = ZeroPadding2D(padding=(1, 1))(inputs)
-    conv = Convolution2D(n_filters, filter_size, filter_size,
-                         border_mode='same', W_regularizer=W_regularizer)(pad)
-    bn = BatchNormalization(mode=0, axis=channel_idx())(conv)
+    conv = Conv2D(n_filters, (filter_size, filter_size),
+                         padding='same', kernel_regularizer=W_regularizer)(pad)
+    bn = BatchNormalization(axis=channel_idx())(conv)
     act = Activation('relu')(bn)
     maxp = MaxPooling2D(pool_size=(2, 2), strides=(2, 2))(act)
     return maxp
@@ -46,9 +46,9 @@ def upsampling_block_basic(inputs, n_filters, filter_size, unpool_layer=None,
         up = DePool2D(unpool_layer)(inputs)
     else:
         up = UpSampling2D()(inputs)
-    conv = Convolution2D(n_filters, filter_size, filter_size,
-                         border_mode='same', W_regularizer=W_regularizer)(up)
-    bn = BatchNormalization(mode=0, axis=channel_idx())(conv)
+    conv = Conv2D(n_filters, (filter_size, filter_size),
+                         padding='same', kernel_regularizer=W_regularizer)(up)
+    bn = BatchNormalization(axis=channel_idx())(conv)
     return bn
 
 
@@ -72,7 +72,7 @@ def build_segnet_basic(inputs, n_classes, depths=[64, 64, 64, 64],
                                   l2(l2_reg))
 
     """ logits """
-    l1 = Convolution2D(n_classes, 1, 1, border_mode='valid')(dec4)
+    l1 = Conv2D(n_classes, (1, 1), padding='valid')(dec4)
     score = CropLayer2D(inputs, name='score')(l1)
     softmax_segnet = NdSoftmax()(score)
 
@@ -89,11 +89,11 @@ def downsampling_block_vgg(inputs, n_conv, n_filters, filter_size, layer_id,
     conv = ZeroPadding2D(padding=(1, 1))(inputs)
     for i in range(1, n_conv+1):
         name = 'conv' + str(layer_id) + '_' + str(i)
-        conv = Convolution2D(n_filters, filter_size, filter_size, init,
-                             border_mode=border_mode,
+        conv = Conv2D(n_filters, (filter_size, filter_size), init,
+                             padding=border_mode,
                              name=name,
-                             W_regularizer=l2(l2_reg))(conv)
-        conv = BatchNormalization(mode=0, axis=channel_idx(),
+                             kernel_regularizer=l2(l2_reg))(conv)
+        conv = BatchNormalization(axis=channel_idx(),
                                   name=name + '_bn')(conv)
         conv = Activation(activation, name=name + '_relu')(conv)
     conv = MaxPooling2D((2, 2), (2, 2), name='pool'+str(layer_id))(conv)
@@ -110,11 +110,11 @@ def upsampling_block_vgg(inputs, n_conv, n_filters, filter_size, layer_id,
     else:
         conv = UpSampling2D()(inputs)
     for i in range(n_conv+1, 1, -1):
-        conv = Convolution2D(n_filters, filter_size, filter_size, init,
-                             border_mode=border_mode,
+        conv = Conv2D(n_filters, (filter_size, filter_size), init,
+                             padding=border_mode,
                              name='conv'+str(layer_id)+'_'+str(i)+'_D',
-                             W_regularizer=l2(l2_reg))(conv)
-        conv = BatchNormalization(mode=0, axis=channel_idx())(conv)
+                             kernel_regularizer=l2(l2_reg))(conv)
+        conv = BatchNormalization(axis=channel_idx())(conv)
         conv = Activation(activation)(conv)
     return conv
 
@@ -137,12 +137,12 @@ def build_segnet_vgg(inputs, n_classes, l2_reg=0.):
     dec1 = upsampling_block_vgg(dec2, 2, 64, 3, 1, l2_reg, enc1)
 
     """ logits """
-    l1 = Convolution2D(n_classes, 1, 1, border_mode='valid')(dec1)
+    l1 = Conv2D(n_classes, (1, 1), padding='valid')(dec1)
     score = CropLayer2D(inputs, name='score')(l1)
     softmax_segnet = NdSoftmax()(score)
 
     # Complete model
-    model = Model(input=inputs, output=softmax_segnet)
+    model = Model(output=softmax_segnet, input=inputs)
 
     return model
 

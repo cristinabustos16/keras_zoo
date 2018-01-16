@@ -40,7 +40,8 @@ def process(configuration):
 
     # Create the callbacks
     print ('\n > Creating callbacks...')
-    cb = Callbacks_Factory().make(cf, valid_gen)
+    #cb = Callbacks_Factory().make(cf, valid_gen)
+    cb = None
 
     try:
         if cf.train_model:
