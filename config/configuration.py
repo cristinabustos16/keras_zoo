@@ -130,8 +130,8 @@ class Configuration():
         if dataset_conf.class_mode == 'segmentation':
             dataset_conf.path_train_img = os.path.join(dataset_conf.path, 'train', 'images')
             dataset_conf.path_train_mask = os.path.join(dataset_conf.path, 'train', 'masks')
-            dataset_conf.path_valid_img = os.path.join(dataset_conf.path, 'valid', 'images')
-            dataset_conf.path_valid_mask = os.path.join(dataset_conf.path, 'valid', 'masks')
+            dataset_conf.path_valid_img = os.path.join(dataset_conf.path, 'validation', 'images')
+            dataset_conf.path_valid_mask = os.path.join(dataset_conf.path, 'validation', 'masks')
             dataset_conf.path_test_img = os.path.join(dataset_conf.path, 'test', 'images')
             dataset_conf.path_test_mask = os.path.join(dataset_conf.path, 'test', 'masks')
         else:
