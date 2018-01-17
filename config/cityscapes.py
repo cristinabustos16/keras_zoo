@@ -28,7 +28,7 @@ max_q_size                   = 10              # Maximum size for the data gener
 workers                      = 5               # Maximum number of processes to spin up when using process based threading
 
 # Batch sizes
-batch_size_train             = 5               # Batch size during training
+batch_size_train             = 100               # Batch size during training
 batch_size_valid             = 10              # Batch size during validation
 batch_size_test              = 10              # Batch size during testing
 crop_size_train              = (640, 640)      # Crop size during training (Height, Width) or None

@@ -146,8 +146,7 @@ def load_img(path, grayscale=False, resize=None, order=1):
     # Resize
     # print('Desired resize: ' + str(resize))
     if resize is not None:
-        img = skimage.transform.resize(img, resize, order=order,
-                                       preserve_range=True)
+        img = skimage.transform.resize(img, resize, order=order)
         # print('Final resize: ' + str(img.shape))
 
     # Color conversion
@@ -966,15 +965,14 @@ class DirectoryIterator(Iterator):
         # Lock the generation of index only. The rest is not under thread
         # lock so it can be done in parallel
         with self.lock:
-            print('----next---')
-            print(next(self.index_generator))
-            index_array, current_index, current_batch_size, x, y = next(self.index_generator)
+            index_array = next(self.index_generator)
 
+        print('after index generator ....')
         # Create the batch_x and batch_y
-        if current_batch_size > 1:
-            batch_x = np.zeros((current_batch_size,) + self.image_shape)
+        if self.batch_size > 1:
+            batch_x = np.zeros((self.batch_size,) + self.image_shape)
             if self.has_gt_image:
-                batch_y = np.zeros((current_batch_size,) + self.gt_image_shape)
+                batch_y = np.zeros((self.batch_size,) + self.gt_image_shape)
             if self.class_mode == 'detection':
                 batch_y = []
 
@@ -986,7 +984,7 @@ class DirectoryIterator(Iterator):
             img = load_img(os.path.join(self.directory, fname),
                            grayscale=self.grayscale,
                            resize=self.resize, order=1)
-            x = img_to_array(img, dim_ordering=self.dim_ordering)
+            x = img_to_array(img)
 
             # Load GT image if segmentation
             if self.has_gt_image:
@@ -994,7 +992,7 @@ class DirectoryIterator(Iterator):
                 gt_img = load_img(os.path.join(self.gt_directory, fname),
                                   grayscale=True,
                                   resize=self.resize, order=0)
-                y = img_to_array(gt_img, dim_ordering=self.dim_ordering)
+                y = img_to_array(gt_img)
             else:
                 y = None
 
@@ -1022,7 +1020,7 @@ class DirectoryIterator(Iterator):
             x, y = self.image_data_generator.random_transform(x, y)
 
             # Add images to batches
-            if current_batch_size > 1:
+            if self.batch_size > 1:
                 batch_x[i] = x
                 if self.has_gt_image:
                     batch_y[i] = y
@@ -1035,12 +1033,13 @@ class DirectoryIterator(Iterator):
                 elif self.class_mode == 'detection':
                     batch_y = [y]
 
+        
         # optionally save augmented images to disk for debugging purposes
         if self.save_to_dir:
-            for i in range(current_batch_size):
+            for i, j in enumerate(index_array):
 
                 fname = '{prefix}_{index}_{hash}.{format}'.format(prefix=self.save_prefix,
-                                                                  index=current_index + i,
+                                                                  index=j,
                                                                   hash=np.random.randint(1e4),
                                                                   format=self.save_format)
 
@@ -1056,7 +1055,7 @@ class DirectoryIterator(Iterator):
                     img = array_to_img(batch_x[i], self.dim_ordering,
                                        scale=True)
                     img.save(os.path.join(self.save_to_dir, fname))
-
+                 
         # Build batch of labels
         if self.class_mode == 'sparse':
             batch_y = self.classes[index_array]
@@ -1072,7 +1071,7 @@ class DirectoryIterator(Iterator):
             batch_y = yolo_build_gt_batch(batch_y, self.image_shape, self.nb_class)
         elif self.class_mode is None:
             return batch_x
-
+   
         return batch_x, batch_y
 
 
