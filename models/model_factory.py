@@ -1,4 +1,6 @@
 import os
+import pydot
+import graphviz
 
 # Keras imports
 from metrics.metrics import cce_flatt, IoU, YOLOLoss, YOLOMetrics
@@ -76,10 +78,13 @@ class Model_Factory():
             # metrics = [IoU(cf.dataset.n_classes, cf.dataset.void_class)]
             loss = 'binary_crossentropy' 
             metrics = ['accuracy']
+
+            print '----in_shape----', in_shape
             print '-----loss ----- ', loss
             print '-----metrics****++++ ', metrics
         else:
             raise ValueError('Unknown problem type')
+
         return in_shape, loss, metrics
 
     # Creates a Model object (not a Keras model)
@@ -185,10 +190,12 @@ class Model_Factory():
         # Show model structure
         if cf.show_model:
             model.summary()
+            print 'save path ',cf.savepath
             plot_model(model, to_file=os.path.join(cf.savepath, 'model.png'))
 
         # Output the model
         print ('   Model: ' + cf.model_name)
+
         # model is a keras model, Model is a class wrapper so that we can have
         # other models (like GANs) made of a pair of keras models, with their
         # own ways to train, test and predict

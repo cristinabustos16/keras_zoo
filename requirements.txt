@@ -1,0 +1,5 @@
+keras
+SimpleITK
+pydot
+graphviz
+#apt-get install graphviz

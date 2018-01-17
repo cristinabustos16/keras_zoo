@@ -966,7 +966,9 @@ class DirectoryIterator(Iterator):
         # Lock the generation of index only. The rest is not under thread
         # lock so it can be done in parallel
         with self.lock:
-            index_array, current_index, current_batch_size = next(self.index_generator)
+            print('----next---')
+            print(next(self.index_generator))
+            index_array, current_index, current_batch_size, x, y = next(self.index_generator)
 
         # Create the batch_x and batch_y
         if current_batch_size > 1:

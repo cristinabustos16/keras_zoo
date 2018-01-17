@@ -53,20 +53,20 @@ weight_decay                 = 0.0005          # Weight decay or L2 parameter no
 n_epochs                     = 500             # Number of epochs during training
 
 # Callback save results
-save_results_enabled         = True            # Enable the Callback
+save_results_enabled         = False            # Enable the Callback
 save_results_nsamples        = 5               # Number of samples to save
 save_results_batch_size      = 5               # Size of the batch
 save_results_n_legend_rows   = 1               # Number of rows when showwing the legend
 
 # Callback early stoping
-earlyStopping_enabled        = True            # Enable the Callback
+earlyStopping_enabled        = False            # Enable the Callback
 earlyStopping_monitor        = 'val_jaccard'   # Metric to monitor
 earlyStopping_mode           = 'max'           # Mode ['max' | 'min']
 earlyStopping_patience       = 10              # Max patience for the early stopping
 earlyStopping_verbose        = 0               # Verbosity of the early stopping
 
 # Callback model check point
-checkpoint_enabled           = True            # Enable the Callback
+checkpoint_enabled           = False            # Enable the Callback
 checkpoint_monitor           = 'val_jaccard'   # Metric to monitor
 checkpoint_mode              = 'max'           # Mode ['max' | 'min']
 checkpoint_save_best_only    = True            # Save best or last model
@@ -74,11 +74,11 @@ checkpoint_save_weights_only = True            # Save only weights or also model
 checkpoint_verbose           = 0               # Verbosity of the checkpoint
 
 # Callback plot
-plotHist_enabled             = True            # Enable the Callback
+plotHist_enabled             = False            # Enable the Callback
 plotHist_verbose             = 0               # Verbosity of the callback
 
 # Callback learning rate scheduler
-LRScheduler_enabled          = True            # Enable the Callback
+LRScheduler_enabled          = False            # Enable the Callback
 LRScheduler_batch_epoch      = 'batch'         # Schedule the LR each 'batch' or 'epoch'
 LRScheduler_type             = 'poly'          # Type of scheduler ['linear' | 'step' | 'square' | 'sqrt' | 'poly']
 LRScheduler_M                = 75000           # Number of iterations/epochs expected until convergence
