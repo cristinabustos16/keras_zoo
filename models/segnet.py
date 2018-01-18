@@ -56,6 +56,7 @@ def upsampling_block_basic(inputs, n_filters, filter_size, unpool_layer=None,
 def build_segnet_basic(inputs, n_classes, depths=[64, 64, 64, 64],
                        filter_size=7, l2_reg=0.):
     """ encoding layers """
+    print('******++++*** ENTRE AQUI ++++++*******')
     enc1 = downsampling_block_basic(inputs, depths[0], filter_size, l2(l2_reg))
     enc2 = downsampling_block_basic(enc1, depths[1], filter_size, l2(l2_reg))
     enc3 = downsampling_block_basic(enc2, depths[2], filter_size, l2(l2_reg))
@@ -74,6 +75,8 @@ def build_segnet_basic(inputs, n_classes, depths=[64, 64, 64, 64],
     """ logits """
     l1 = Conv2D(n_classes, (1, 1), padding='valid')(dec4)
     score = CropLayer2D(inputs, name='score')(l1)
+
+    print('******++++*** score shape  ++++++*******', str(score.shape))
     softmax_segnet = NdSoftmax()(score)
 
     # Complete model
@@ -89,7 +92,7 @@ def downsampling_block_vgg(inputs, n_conv, n_filters, filter_size, layer_id,
     conv = ZeroPadding2D(padding=(1, 1))(inputs)
     for i in range(1, n_conv+1):
         name = 'conv' + str(layer_id) + '_' + str(i)
-        conv = Conv2D(n_filters, (filter_size, filter_size), init,
+        conv = Conv2D(n_filters, (filter_size, filter_size), kernel_initializer=init,
                              padding=border_mode,
                              name=name,
                              kernel_regularizer=l2(l2_reg))(conv)
@@ -110,7 +113,7 @@ def upsampling_block_vgg(inputs, n_conv, n_filters, filter_size, layer_id,
     else:
         conv = UpSampling2D()(inputs)
     for i in range(n_conv+1, 1, -1):
-        conv = Conv2D(n_filters, (filter_size, filter_size), init,
+        conv = Conv2D(n_filters, (filter_size, filter_size), kernel_initializer=init,
                              padding=border_mode,
                              name='conv'+str(layer_id)+'_'+str(i)+'_D',
                              kernel_regularizer=l2(l2_reg))(conv)

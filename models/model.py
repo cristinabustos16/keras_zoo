@@ -53,7 +53,6 @@ class One_Net_Model(Model):
     def train(self, train_gen, valid_gen, cb):
         if (self.cf.train_model):
             print('\n > Training the model...')
-            self.cf.workers = 1 
             hist = self.model.fit_generator(generator=train_gen,
                                             steps_per_epoch=self.cf.dataset.n_images_train,
                                             epochs=self.cf.n_epochs,
@@ -62,8 +61,8 @@ class One_Net_Model(Model):
                                             validation_data=valid_gen,
                                             validation_steps=self.cf.dataset.n_images_valid,
                                             class_weight=None,
-                                            max_queue_size=None,
-                                            workers=None
+                                            max_queue_size=self.cf.max_q_size,
+                                            workers=self.cf.workers
                                             )
             print('   Training finished.')
 

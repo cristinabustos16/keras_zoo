@@ -966,8 +966,6 @@ class DirectoryIterator(Iterator):
         # lock so it can be done in parallel
         with self.lock:
             index_array = next(self.index_generator)
-
-        print('after index generator ....')
         # Create the batch_x and batch_y
         if self.batch_size > 1:
             batch_x = np.zeros((self.batch_size,) + self.image_shape)
@@ -1071,7 +1069,7 @@ class DirectoryIterator(Iterator):
             batch_y = yolo_build_gt_batch(batch_y, self.image_shape, self.nb_class)
         elif self.class_mode is None:
             return batch_x
-   
+
         return batch_x, batch_y
 
 
